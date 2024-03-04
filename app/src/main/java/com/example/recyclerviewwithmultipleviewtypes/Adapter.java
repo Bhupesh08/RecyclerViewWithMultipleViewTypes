@@ -1,5 +1,6 @@
 package com.example.recyclerviewwithmultipleviewtypes;
 
+import static com.example.recyclerviewwithmultipleviewtypes.ModalClass.LAYOUT_FOUR;
 import static com.example.recyclerviewwithmultipleviewtypes.ModalClass.LAYOUT_ONE;
 import static com.example.recyclerviewwithmultipleviewtypes.ModalClass.LAYOUT_THREE;
 import static com.example.recyclerviewwithmultipleviewtypes.ModalClass.LAYOUT_TWO;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -43,6 +45,8 @@ public class Adapter extends RecyclerView.Adapter {
             case 3:
                 return LAYOUT_THREE;
 
+            case 4:
+                return LAYOUT_FOUR;
 
             default:
                 return -1;
@@ -70,6 +74,10 @@ public class Adapter extends RecyclerView.Adapter {
                 View layout_three = LayoutInflater.from(context).inflate(R.layout.discover, parent, false);
                 return new DiscoverViewHolder(layout_three);
 
+            case LAYOUT_FOUR:
+                View layout_four = LayoutInflater.from(context).inflate(R.layout.parent_rv_layout, parent, false);
+                return new ParentViewHolder(layout_four);
+
             default:
                 return null;
         }
@@ -95,6 +103,13 @@ public class Adapter extends RecyclerView.Adapter {
                 ((DiscoverViewHolder)holder).textView.setText(model3.getTextview());
                 break;
 
+            case LAYOUT_FOUR:
+                ChildAdapter childAdapter;
+                childAdapter = new ChildAdapter(listItems.get(position).getChildModalList(), context);
+                ((ParentViewHolder) holder).recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+                ((ParentViewHolder) holder).recyclerView.setAdapter(childAdapter);
+
+                childAdapter.notifyDataSetChanged();
 
         }
 
@@ -132,6 +147,15 @@ public class Adapter extends RecyclerView.Adapter {
             super(itemView);
             textView = itemView.findViewById(R.id.discover_txt);
             imageView = itemView.findViewById(R.id.discover_img);
+        }
+    }
+
+    class ParentViewHolder extends RecyclerView.ViewHolder {
+
+        RecyclerView recyclerView;
+        public ParentViewHolder(@NonNull View itemView) {
+            super(itemView);
+            recyclerView = itemView.findViewById(R.id.child_rv);
         }
     }
 }
