@@ -10,6 +10,7 @@ public class ModalClass {
     public static final int LAYOUT_TWO = 2;
     public static final int LAYOUT_THREE = 3;
 
+
     private final int viewType;
     private int imageview;
     private String textview;
